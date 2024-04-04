@@ -11,25 +11,8 @@ import ghidra.program.model.mem.MemoryAccessException;
 public class GameboyHelper {
 	private static PluginTool tool = null;
 	private static FlatProgramAPI api = null;
-	private static boolean useNewLicenseeCode = false;
 	
 	private static LinkedHashMap<String, Integer> headerEntries = new LinkedHashMap<String, Integer>();
-//	{{
-//		put("Entry Point", 0x103);
-//		put("Nintendo Logo", 0x133);
-//		put("Title", 0x143);
-////		put("Manufacturer Code", 0x142) 
-////		put("New Licensee Code", 0x145); 
-//		put("SGB Flag",0x146);
-//		put("Cartridge Type", 0x147);
-//		put("ROM Size", 0x148);
-//		put("RAM Size", 0x149);
-//		put("Destination Code", 0x014A);
-//		put("Old Licensee Code", 0x14B);
-//		put("Mask ROM Version", 0x14C);
-//		put("Header Checksum", 0x14D);
-//		put("Global Checksum", 0x14F);		
-//	}};
 	
 	public static void init(PluginTool tool2, FlatProgramAPI api2) {
 		// TODO Auto-generated method stub
