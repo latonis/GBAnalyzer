@@ -1,8 +1,11 @@
 package gameboy;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
+
+import org.apache.commons.lang3.ArrayUtils;
 
 import ghidra.framework.plugintool.PluginTool;
 import ghidra.program.flatapi.FlatProgramAPI;
@@ -18,6 +21,7 @@ public class GameboyHelper {
 		// TODO Auto-generated method stub
 		GameboyHelper.tool = tool2;
 		GameboyHelper.api = api2;
+		buildMap();
 	}
 	
 	private static void buildMap() {
@@ -50,23 +54,27 @@ public class GameboyHelper {
 		return api.getCurrentProgram().getDomainFile().getName();
 	}
 	
-	public static void getHeader() {
-		
-		buildMap();
-		
+	public static LinkedHashMap<String, byte[]> getHeader() {
 		Integer pointer = 0x100;
+		LinkedHashMap<String, byte[]> headerBytes = new LinkedHashMap<>();
+		
 		try {
 			for (Map.Entry<String, Integer> entry : headerEntries.entrySet()) {
-				System.out.print(entry.getKey() + ": ");
+				ArrayList<Byte> curBytes = new ArrayList<Byte>();
+				
 				while (pointer <= entry.getValue()) {
-					System.out.print(String.format("%02X ", api.getByte(api.toAddr(pointer))));
+					curBytes.add(api.getByte(api.toAddr(pointer)));
 					pointer++;
 				}
-				System.out.println();
+				
+				headerBytes.put(entry.getKey(), ArrayUtils.toPrimitive(curBytes.toArray(new Byte[0])));
 			}
 		} catch (MemoryAccessException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		return headerBytes;
+		
 	}
 }

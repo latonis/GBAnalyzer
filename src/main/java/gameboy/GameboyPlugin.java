@@ -15,6 +15,9 @@
  */
 package gameboy;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 //import java.awt.BorderLayout;
 //
 //import javax.swing.*;
@@ -77,10 +80,5 @@ public class GameboyPlugin extends ProgramPlugin {
 		
 		api = new FlatProgramAPI(this.currentProgram);
 		GameboyHelper.init(tool, api);
-		
-		System.out.println(api.getCurrentProgram().getImageBase());
-        System.out.println(GameboyHelper.getProgName());
-        GameboyHelper.getHeader();
-
     }
 }

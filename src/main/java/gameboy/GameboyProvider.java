@@ -1,25 +1,32 @@
 package gameboy;
 
 import java.awt.BorderLayout;
-import java.util.Arrays;
-import java.util.Map;
-
-import javax.swing.*;
-
-import docking.*;
-import docking.ActionContext;
-import docking.action.DockingAction;
-import docking.ComponentProvider;
-import docking.action.ToolBarData;
-import ghidra.framework.plugintool.*;
-import ghidra.util.HelpLocation;
-import ghidra.util.Msg;
-import resources.Icons;
-
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
+import javax.swing.JComponent;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextArea;
+
+import docking.ActionContext;
+import docking.ComponentProvider;
+import docking.WindowPosition;
+import docking.action.DockingAction;
+import docking.action.ToolBarData;
+import ghidra.util.HelpLocation;
+import ghidra.util.Msg;
+import resources.Icons;
+
+import org.kordamp.ikonli.Ikon;
+import org.kordamp.ikonli.IkonProvider;
+import org.kordamp.ikonli.evaicons.Evaicons;
+import org.kordamp.ikonli.swing.FontIcon;
 
 class SimpleNumberLinePanel extends JPanel {
 
@@ -93,7 +100,6 @@ public class GameboyProvider extends ComponentProvider {
     private final static HelpLocation HELP =
             new HelpLocation("GameBoyHelp", "HELPME");
     private JPanel panel;
-    private DockingAction action;
     
     public GameboyProvider(GameboyPlugin plugin, String owner) {
         super(plugin.getTool(), owner, owner);
@@ -138,17 +144,44 @@ public class GameboyProvider extends ComponentProvider {
 
     // TODO: Customize actions
     private void createActions() {
-        action = new DockingAction("Gameboy Action", getName()) {
-            @Override
-            public void actionPerformed(ActionContext context) {
-                Msg.showInfo(getClass(), panel, "Custom Action", "Hello!");
-            }
+        DockingAction parseHeaderAction = new DockingAction("Parse Header", getName()) {
+        	@Override
+        	public void actionPerformed(ActionContext context) {
+                LinkedHashMap<String, byte[]> entries = GameboyHelper.getHeader();
+                
+        		for (Map.Entry<String, byte[]> entry : entries.entrySet()) {
+        			System.out.print(entry.getKey() + ": ");
+        			for (byte a: entry.getValue()) {
+        				System.out.print(String.format("%02X ", a)); 
+        			}
+        			System.out.println();
+        		}
+        	}
         };
-        action.setToolBarData(new ToolBarData(Icons.INFO_ICON, null));
-        action.setEnabled(true);
-        action.markHelpUnnecessary();
-        action.setHelpLocation(HELP);
-        dockingTool.addLocalAction(this, action);
+        
+        parseHeaderAction.setToolBarData(new ToolBarData(FontIcon.of(Evaicons.FILE_TEXT), null));
+        parseHeaderAction.setEnabled(true);
+        parseHeaderAction.markHelpUnnecessary();
+        parseHeaderAction.setHelpLocation(HELP);
+        dockingTool.addLocalAction(this, parseHeaderAction);
+        
+        DockingAction checksumAction = new DockingAction("Calculate and Verify Checksums", getName()) {
+        	@Override
+        	public void actionPerformed(ActionContext context) {
+              System.out.println("This is a checksum");
+        	}
+        };
+        
+        checksumAction.setToolBarData(new ToolBarData(FontIcon.of(Evaicons.HASH), null));
+        checksumAction.setEnabled(true);
+        checksumAction.markHelpUnnecessary();
+        checksumAction.setHelpLocation(HELP);
+        dockingTool.addLocalAction(this, checksumAction);
+        
+    
+   
+        
+        
     }
 
     
