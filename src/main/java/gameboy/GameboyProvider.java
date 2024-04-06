@@ -19,12 +19,11 @@ import docking.ComponentProvider;
 import docking.WindowPosition;
 import docking.action.DockingAction;
 import docking.action.ToolBarData;
+import ghidra.framework.plugintool.PluginTool;
 import ghidra.util.HelpLocation;
 import ghidra.util.Msg;
 import resources.Icons;
 
-import org.kordamp.ikonli.Ikon;
-import org.kordamp.ikonli.IkonProvider;
 import org.kordamp.ikonli.evaicons.Evaicons;
 import org.kordamp.ikonli.swing.FontIcon;
 
@@ -100,9 +99,12 @@ public class GameboyProvider extends ComponentProvider {
     private final static HelpLocation HELP =
             new HelpLocation("GameBoyHelp", "HELPME");
     private JPanel panel;
+	private final PluginTool tool;
+
     
     public GameboyProvider(GameboyPlugin plugin, String owner) {
         super(plugin.getTool(), owner, owner);
+        this.tool = plugin.getTool();
         buildPanel();
         setHelpLocation(HELP);
         setDefaultWindowPosition(WindowPosition.WINDOW);
@@ -163,12 +165,16 @@ public class GameboyProvider extends ComponentProvider {
         parseHeaderAction.setEnabled(true);
         parseHeaderAction.markHelpUnnecessary();
         parseHeaderAction.setHelpLocation(HELP);
-        dockingTool.addLocalAction(this, parseHeaderAction);
-        
+        dockingTool.addLocalAction(this, parseHeaderAction);        
+       
         DockingAction checksumAction = new DockingAction("Calculate and Verify Checksums", getName()) {
         	@Override
         	public void actionPerformed(ActionContext context) {
-              System.out.println("This is a checksum");
+        		int checksum = GameboyHelper.calcHeaderChecksum();
+        		System.out.println("Calculated Checksum: " +  checksum);
+        		System.out.println("Given Checksum: " +   Byte.toUnsignedInt(GameboyHelper.getHeaderChecksum()));
+        		System.out.println("Checksum Valid? - " + (checksum == Byte.toUnsignedInt(GameboyHelper.getHeaderChecksum())));
+        		tool.showDialog(new ChecksumDialog("Checksum Stuff"));
         	}
         };
         
@@ -177,11 +183,6 @@ public class GameboyProvider extends ComponentProvider {
         checksumAction.markHelpUnnecessary();
         checksumAction.setHelpLocation(HELP);
         dockingTool.addLocalAction(this, checksumAction);
-        
-    
-   
-        
-        
     }
 
     

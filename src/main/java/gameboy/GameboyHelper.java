@@ -15,7 +15,8 @@ public class GameboyHelper {
 	private static PluginTool tool = null;
 	private static FlatProgramAPI api = null;
 	
-	private static LinkedHashMap<String, Integer> headerEntries = new LinkedHashMap<String, Integer>();
+	public static LinkedHashMap<String, Integer> headerEntries = new LinkedHashMap<String, Integer>();
+	public static int headerChecksum = 0;
 	
 	public static void init(PluginTool tool2, FlatProgramAPI api2) {
 		// TODO Auto-generated method stub
@@ -52,6 +53,34 @@ public class GameboyHelper {
 	
 	public static String getProgName() {
 		return api.getCurrentProgram().getDomainFile().getName();
+	}
+	
+	public static int calcHeaderChecksum() {
+		int checksum = 0;
+		try {
+			for (int addr = 0x134; addr <= 0x14C; addr++) {
+				checksum = checksum - api.getByte(api.toAddr(addr)) - 1;
+			}
+		} catch (MemoryAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		headerChecksum = checksum & 0xFF;
+		return headerChecksum;
+	}
+	
+	public static byte getHeaderChecksum() {
+		byte checksum = 0;
+		
+		try {
+			checksum = api.getByte(api.toAddr(headerEntries.get("Header Checksum")));
+		} catch (MemoryAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return checksum;
 	}
 	
 	public static LinkedHashMap<String, byte[]> getHeader() {
