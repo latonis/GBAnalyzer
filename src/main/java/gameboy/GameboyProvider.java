@@ -158,6 +158,7 @@ public class GameboyProvider extends ComponentProvider {
         			}
         			System.out.println();
         		}
+        		tool.showDialog(new HeaderDialog("Gameboy Header Information"));
         	}
         };
         
@@ -174,7 +175,7 @@ public class GameboyProvider extends ComponentProvider {
         		System.out.println("Calculated Checksum: " +  checksum);
         		System.out.println("Given Checksum: " +   Byte.toUnsignedInt(GameboyHelper.getHeaderChecksum()));
         		System.out.println("Checksum Valid? - " + (checksum == Byte.toUnsignedInt(GameboyHelper.getHeaderChecksum())));
-        		tool.showDialog(new ChecksumDialog("Checksum Stuff"));
+        		tool.showDialog(new ChecksumDialog("Gameboy Checksum Information"));
         	}
         };
         
