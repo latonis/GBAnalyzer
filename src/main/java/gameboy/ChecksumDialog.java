@@ -67,11 +67,12 @@ public class ChecksumDialog extends DialogComponentProvider {
 		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		
 		JLabel lblGivenChecksum = new JLabel("Given Checksum");
+		lblGivenChecksum.setHorizontalAlignment(SwingConstants.CENTER);
 		lblGivenChecksum.setBounds(78, 12, 119, 15);
 		contentPanel.add(lblGivenChecksum);
 		
 		JLabel lblCalculatedChecksum = new JLabel("Calculated Checksum");
-		lblCalculatedChecksum.setBounds(268, 12, 150, 15);
+		lblCalculatedChecksum.setBounds(266, 12, 150, 15);
 		contentPanel.add(lblCalculatedChecksum);
 		
 		JPanel panel_1 = new JPanel();
