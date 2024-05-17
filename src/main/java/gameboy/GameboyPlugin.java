@@ -80,5 +80,6 @@ public class GameboyPlugin extends ProgramPlugin {
 		
 		api = new FlatProgramAPI(this.currentProgram);
 		GameboyHelper.init(tool, api);
+		provider.addDetailsPanel();
     }
 }
