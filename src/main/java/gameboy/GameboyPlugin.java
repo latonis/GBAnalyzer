@@ -19,9 +19,9 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 //import java.awt.BorderLayout;
+
 //
 //import javax.swing.*;
-
 
 import ghidra.app.CorePluginPackage;
 import ghidra.app.plugin.PluginCategoryNames;
@@ -48,7 +48,7 @@ public class GameboyPlugin extends ProgramPlugin {
 
 	GameboyProvider provider;
 	FlatProgramAPI api;
-	
+
 	/**
 	 * Plugin constructor.
 	 * 
@@ -60,7 +60,7 @@ public class GameboyPlugin extends ProgramPlugin {
 		// TODO: Customize provider (or remove if a provider is not desired)
 		String pluginName = getName();
 		provider = new GameboyProvider(this, pluginName);
-		
+
 		// TODO: Customize help (or remove if help is not desired)
 		String topicName = this.getClass().getPackage().getName();
 		String anchorName = "HelpAnchor";
@@ -73,13 +73,13 @@ public class GameboyPlugin extends ProgramPlugin {
 
 		// TODO: Acquire services if necessary
 	}
-	
-    @Override
-    public void programActivated(Program program) {
+
+	@Override
+	public void programActivated(Program program) {
 		super.programActivated(program);
-		
+
 		api = new FlatProgramAPI(this.currentProgram);
 		GameboyHelper.init(tool, api);
 		provider.addDetailsPanel();
-    }
+	}
 }

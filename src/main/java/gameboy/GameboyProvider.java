@@ -105,36 +105,33 @@ public class GameboyProvider extends ComponentProvider {
 		setVisible(true);
 		createActions();
 	}
-	
-	public void addDetailsPanel() {		
+
+	public void addDetailsPanel() {
+
+		JLabel lblFileInfo = new JLabel("<html><b>File Information</b></html>");
+		lblFileInfo.setBounds(12, 24, 70, 15);
+		panel.add(lblFileInfo);
+
+		emptyLine();
+
 		JLabel lblFile = new JLabel("File:");
 		lblFile.setBounds(12, 24, 70, 15);
 		panel.add(lblFile);
-		
+
 		JLabel lblFileName = new JLabel(GameboyHelper.getProgName());
 		lblFileName.setBounds(94, 24, 70, 15);
 		panel.add(lblFileName);
-		
+
 		emptyLine();
-		
+
 		JLabel lblPath = new JLabel("File Path:");
 		lblPath.setBounds(12, 24, 70, 15);
 		panel.add(lblPath);
-		
+
 		JLabel lblPathName = new JLabel(GameboyHelper.getPath());
 		lblPathName.setBounds(94, 24, 70, 15);
 		panel.add(lblPathName);
-		
-		emptyLine();
-		
-		JLabel lblSHA256 = new JLabel("SHA256:");
-		lblSHA256.setBounds(12, 24, 70, 15);
-		panel.add(lblSHA256);
 
-		JLabel lblSHA256Value = new JLabel(GameboyHelper.getSHA256());
-		lblSHA256Value.setBounds(94, 24, 70, 15);
-		panel.add(lblSHA256Value);
-		
 		emptyLine();
 
 		JLabel lblMD5 = new JLabel("MD5:");
@@ -144,7 +141,53 @@ public class GameboyProvider extends ComponentProvider {
 		JLabel lblMD5Value = new JLabel(GameboyHelper.getMD5());
 		lblMD5Value.setBounds(94, 24, 70, 15);
 		panel.add(lblMD5Value);
-		
+
+		emptyLine();
+
+		JLabel lblSHA256 = new JLabel("SHA256:");
+		lblSHA256.setBounds(12, 24, 70, 15);
+		panel.add(lblSHA256);
+
+		JLabel lblSHA256Value = new JLabel(GameboyHelper.getSHA256());
+		lblSHA256Value.setBounds(94, 24, 70, 15);
+		panel.add(lblSHA256Value);
+
+		emptyLine();
+
+		JLabel lblGame = new JLabel("<html><b>Game Information</b></html>");
+		lblGame.setBounds(12, 24, 70, 15);
+		panel.add(lblGame);
+
+		emptyLine();
+
+		JLabel lblLicensee = new JLabel("Licensee:");
+		lblLicensee.setBounds(12, 24, 70, 15);
+		panel.add(lblLicensee);
+
+		JLabel lblLicenseeVal = new JLabel(GameboyHelper.getLicensee());
+		lblLicenseeVal.setBounds(94, 24, 70, 15);
+		panel.add(lblLicenseeVal);
+
+		emptyLine();
+
+		JLabel lblDest = new JLabel("Destination Code:");
+		lblDest.setBounds(12, 24, 70, 15);
+		panel.add(lblDest);
+
+		JLabel lblDestCode = new JLabel(GameboyHelper.getDestination());
+		lblDestCode.setBounds(94, 24, 70, 15);
+		panel.add(lblDestCode);
+
+		emptyLine();
+
+		JLabel lblRom = new JLabel("Rom Size:");
+		lblRom.setBounds(12, 24, 70, 15);
+		panel.add(lblRom);
+
+		JLabel lblRomSize = new JLabel(GameboyHelper.getRomSize());
+		lblRomSize.setBounds(94, 24, 70, 15);
+		panel.add(lblRomSize);
+
 		emptyLine();
 //
 //		JTextArea textArea = new JTextArea(5, 25);
@@ -152,11 +195,11 @@ public class GameboyProvider extends ComponentProvider {
 	}
 
 	private void emptyLine() {
-		JLabel empty_line = new JLabel("");   // <--- empty label to effect next row
-		empty_line.setPreferredSize(new Dimension(3000,0));
+		JLabel empty_line = new JLabel(""); // <--- empty label to effect next row
+		empty_line.setPreferredSize(new Dimension(3000, 0));
 		panel.add(empty_line);
 	}
-	
+
 	// Customize GUI
 	private void buildPanel() {
 		panel = new JPanel();
