@@ -1,5 +1,6 @@
 package gameboy;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -20,6 +21,7 @@ public class GameboyHelper {
 	public static LinkedHashMap<Integer, String> ioEntries = new LinkedHashMap<Integer, String>();
 	private static LinkedHashMap<Integer, String> oldLicensees = new LinkedHashMap<Integer, String>();
 	private static LinkedHashMap<String, String> newLicensees = new LinkedHashMap<String, String>();
+	public static LinkedHashMap<String, byte[]> headerBytes = new LinkedHashMap<>();
 
 	public static int headerChecksum = 0;
 
@@ -27,7 +29,8 @@ public class GameboyHelper {
 		GameboyHelper.tool = tool_;
 		GameboyHelper.api = api_;
 		buildMap();
-		setComments();
+		buildHeader();
+//		setComments();
 		buildLicensees();
 	}
 
@@ -415,6 +418,26 @@ public class GameboyHelper {
 		return null;
 	}
 
+	public static String getRomVersion() {
+		try {
+			int value = api.getByte(api.toAddr(headerEntries.get("Mask ROM Version")));
+			return String.format("0x%x", value);
+		} catch (MemoryAccessException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	public static String getTitle() {
+		try {
+			return new String(headerBytes.get("Title"), "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+
 	public static int calcHeaderChecksum() {
 		int checksum = 0;
 		try {
@@ -441,10 +464,8 @@ public class GameboyHelper {
 		return checksum;
 	}
 
-	public static LinkedHashMap<String, byte[]> getHeader() {
+	public static void buildHeader() {
 		Integer pointer = 0x100;
-		LinkedHashMap<String, byte[]> headerBytes = new LinkedHashMap<>();
-
 		try {
 			for (Map.Entry<String, Integer> entry : headerEntries.entrySet()) {
 				ArrayList<Byte> curBytes = new ArrayList<Byte>();
@@ -459,8 +480,6 @@ public class GameboyHelper {
 		} catch (MemoryAccessException e) {
 			e.printStackTrace();
 		}
-
-		return headerBytes;
-
+		return;
 	}
 }

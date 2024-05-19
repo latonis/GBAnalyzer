@@ -35,7 +35,7 @@ public class HeaderDialog extends DialogComponentProvider {
 		contentPanel.setLayout(null);
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		addWorkPanel(contentPanel);
-		
+
 //		Color validColor = new Color((0*12) + 12 % 255, 153, 0);
 //		JPanel panel = new JPanel(new BorderLayout());
 //		panel.setBounds(12, 89, 44, 105);
@@ -52,24 +52,21 @@ public class HeaderDialog extends DialogComponentProvider {
 //		lblNewLabel.setEditable(false);
 //		lblNewLabel.setBorder(null);
 //		contentPanel.add(panel);
-		
 
-		
-		LinkedHashMap<String, byte[]> header = GameboyHelper.getHeader();
 		int start = 12;
 		int i = 0;
-		for (Map.Entry<String, byte[]> entry : header.entrySet()) {
+		for (Map.Entry<String, byte[]> entry : GameboyHelper.headerBytes.entrySet()) {
 			int width = 82;
 			int height = 150;
-			Color validColor = new Color((i*12) + start % 255, 153, 0);
+			Color validColor = new Color((i * 12) + start % 255, 153, 0);
 			JPanel panel = new JPanel(new BorderLayout());
 			panel.setBackground(validColor);
-			panel.setBounds((i*12) + start + (i*width), 100, width, height);
+			panel.setBounds((i * 12) + start + (i * width), 100, width, height);
 			String chars = "";
-			for (byte b: entry.getValue()) {
+			for (byte b : entry.getValue()) {
 				chars += String.format("%02X ", b);
 			}
-			JTextArea textArea = new JTextArea(7,8);
+			JTextArea textArea = new JTextArea(7, 8);
 			textArea.setOpaque(false);
 			textArea.setText(chars);
 			textArea.setLineWrap(true);
@@ -77,14 +74,14 @@ public class HeaderDialog extends DialogComponentProvider {
 			textArea.setBorder(null);
 			textArea.setHighlighter(null);
 			textArea.setBackground(validColor);
-	        panel.add(textArea, BorderLayout.NORTH);
+			panel.add(textArea, BorderLayout.NORTH);
 			contentPanel.add(panel);
-			
+
 			JLabel lblNewLabel_1 = new JLabel(entry.getKey());
 			lblNewLabel_1.setHorizontalAlignment(SwingConstants.CENTER);
-			lblNewLabel_1.setBounds((i*12) + start + (i*width), 250, 70, 15);
+			lblNewLabel_1.setBounds((i * 12) + start + (i * width), 250, 70, 15);
 			contentPanel.add(lblNewLabel_1);
-			
+
 			i++;
 		}
 	}

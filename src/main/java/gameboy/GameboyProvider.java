@@ -41,10 +41,6 @@ class SimpleNumberLinePanel extends JPanel {
 	private static final Font FONT = new Font(Font.MONOSPACED, Font.BOLD, 14);
 	private static final int TEXT_GAP = 2;
 
-	private static Map<String, Integer> headerEntries = Map.of(
-
-	);
-
 	@Override
 	protected void paintComponent(Graphics g) {
 		// call super method
@@ -100,6 +96,7 @@ public class GameboyProvider extends ComponentProvider {
 		this.tool = plugin.getTool();
 		buildPanel();
 		setHelpLocation(HELP);
+		setIcon(FontIcon.of(Evaicons.STAR));
 		setDefaultWindowPosition(WindowPosition.WINDOW);
 		setTitle("Game Boy Game Analysis");
 		setVisible(true);
@@ -159,6 +156,16 @@ public class GameboyProvider extends ComponentProvider {
 		panel.add(lblGame);
 
 		emptyLine();
+		
+		JLabel lblTitle = new JLabel("Title:");
+		lblTitle.setBounds(12, 24, 70, 15);
+		panel.add(lblTitle);
+
+		JLabel lblTitleVal = new JLabel(GameboyHelper.getTitle());
+		lblTitleVal.setBounds(94, 24, 70, 15);
+		panel.add(lblTitleVal);
+
+		emptyLine();
 
 		JLabel lblLicensee = new JLabel("Licensee:");
 		lblLicensee.setBounds(12, 24, 70, 15);
@@ -177,6 +184,16 @@ public class GameboyProvider extends ComponentProvider {
 		JLabel lblDestCode = new JLabel(GameboyHelper.getDestination());
 		lblDestCode.setBounds(94, 24, 70, 15);
 		panel.add(lblDestCode);
+
+		emptyLine();
+		
+		JLabel lblRomV = new JLabel("Rom Version:");
+		lblRomV.setBounds(12, 24, 70, 15);
+		panel.add(lblRomV);
+
+		JLabel lblRomVersion = new JLabel(GameboyHelper.getRomVersion());
+		lblRomVersion.setBounds(94, 24, 70, 15);
+		panel.add(lblRomVersion);
 
 		emptyLine();
 
@@ -212,9 +229,8 @@ public class GameboyProvider extends ComponentProvider {
 		DockingAction parseHeaderAction = new DockingAction("Parse Header", getName()) {
 			@Override
 			public void actionPerformed(ActionContext context) {
-				LinkedHashMap<String, byte[]> entries = GameboyHelper.getHeader();
 
-				for (Map.Entry<String, byte[]> entry : entries.entrySet()) {
+				for (Map.Entry<String, byte[]> entry : GameboyHelper.headerBytes.entrySet()) {
 					System.out.print(entry.getKey() + ": ");
 					for (byte a : entry.getValue()) {
 						System.out.print(String.format("%02X ", a));
