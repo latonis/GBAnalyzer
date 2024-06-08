@@ -206,6 +206,16 @@ public class GameboyProvider extends ComponentProvider {
 		panel.add(lblRomSize);
 
 		emptyLine();
+		
+		JLabel lblCart = new JLabel("Catridge Type:");
+		lblCart.setBounds(12, 24, 70, 15);
+		panel.add(lblCart);
+
+		JLabel lblCartType = new JLabel(GameboyHelper.getCartridgeType());
+		lblCartType.setBounds(94, 24, 70, 15);
+		panel.add(lblCartType);
+
+		emptyLine();
 //
 //		JTextArea textArea = new JTextArea(5, 25);
 //		textArea.setEditable(false);

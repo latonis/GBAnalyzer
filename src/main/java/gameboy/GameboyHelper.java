@@ -22,6 +22,7 @@ public class GameboyHelper {
 	private static LinkedHashMap<Integer, String> oldLicensees = new LinkedHashMap<Integer, String>();
 	private static LinkedHashMap<String, String> newLicensees = new LinkedHashMap<String, String>();
 	public static LinkedHashMap<String, byte[]> headerBytes = new LinkedHashMap<>();
+	public static LinkedHashMap<Integer, String> cartTypes = new LinkedHashMap<Integer, String>();
 
 	public static int headerChecksum = 0;
 
@@ -29,9 +30,41 @@ public class GameboyHelper {
 		GameboyHelper.tool = tool_;
 		GameboyHelper.api = api_;
 		buildMap();
+		buildCartridgeTypes();
 		buildHeader();
 //		setComments();
 		buildLicensees();
+	}
+
+	private static void buildCartridgeTypes() {
+		cartTypes.put(0x00, "ROM ONLY");
+		cartTypes.put(0x01, "MBC1");
+		cartTypes.put(0x02, "MBC1+RAM");
+		cartTypes.put(0x03, "MBC1+RAM+BATTERY");
+		cartTypes.put(0x05, "MBC2");
+		cartTypes.put(0x06, "MBC2+BATTERY");
+		cartTypes.put(0x08, "ROM+RAM");
+		cartTypes.put(0x09, "ROM+RAM+BATTERY");
+		cartTypes.put(0x0B, "MMM01");
+		cartTypes.put(0x0C, "MMM01+RAM");
+		cartTypes.put(0x0D, "MMM01+RAM+BATTERY");
+		cartTypes.put(0x0F, "MBC3+TIMER+BATTERY");
+		cartTypes.put(0x10, "MBC3+TIMER+RAM+BATTERY");
+		cartTypes.put(0x11, "MBC3");
+		cartTypes.put(0x12, "MBC3+RAM");
+		cartTypes.put(0x13, "MBC3+RAM+BATTERY");
+		cartTypes.put(0x19, "MBC5");
+		cartTypes.put(0x1A, "MBC5+RAM");
+		cartTypes.put(0x1B, "MBC5+RAM+BATTERY");
+		cartTypes.put(0x1C, "MBC5+RUMBLE");
+		cartTypes.put(0x1D, "MBC5+RUMBLE+RAM");
+		cartTypes.put(0x1E, "MBC5+RUMBLE+RAM+BATTERY");
+		cartTypes.put(0x20, "MBC6");
+		cartTypes.put(0x22, "MBC7+SENSOR+RUMBLE+RAM+BATTERY");
+		cartTypes.put(0xFC, "POCKET CAMERA");
+		cartTypes.put(0xFD, "BANDAI TAMA5");
+		cartTypes.put(0xFE, "HuC3");
+		cartTypes.put(0xFF, "HuC1+RAM+BATTERY");
 	}
 
 	private static void buildLicensees() {
@@ -427,7 +460,7 @@ public class GameboyHelper {
 		}
 		return null;
 	}
-	
+
 	public static String getTitle() {
 		try {
 			return new String(headerBytes.get("Title"), "UTF-8");
@@ -462,6 +495,16 @@ public class GameboyHelper {
 		}
 
 		return checksum;
+	}
+
+	public static String getCartridgeType() {
+		try {
+			int value = api.getByte(api.toAddr(headerEntries.get("Cartridge Type")));
+			return cartTypes.get(value);
+		} catch (MemoryAccessException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	public static void buildHeader() {
