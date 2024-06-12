@@ -24,4 +24,27 @@ jobs:
     - name: Setup Gradle
       uses: gradle/actions/setup-gradle@v3
     - name: Build with Gradle
-      run: gradle build
+      run:  gradle -PGHIDRA_INSTALL_DIR=/home/runner/ghidra  
+    - uses: actions/upload-artifact@v4
+      with:
+        name: "GBAnalyzer_Plugin_${{env.GHIDRA_VERSION}}"
+        path: dist/*GBAnalyzer.zip
+        if-no-files-found: 'error'
+
+
+  release:
+    if: github.ref_type == 'tag'
+    name: Create draft release
+    runs-on: ubuntu-latest
+    needs: build
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+      - name: Create release and upload distribution
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release create --verify-tag --generate-notes --draft "${{ github.ref_name }}"
+          gh release upload "${{ github.ref_name }}" *${{env.GHIDRA_VERSION}}.zip
