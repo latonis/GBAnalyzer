@@ -24,4 +24,9 @@ jobs:
     - name: Setup Gradle
       uses: gradle/actions/setup-gradle@v3
     - name: Build with Gradle
-      run: gradle build
+      run:  gradle -PGHIDRA_INSTALL_DIR=/home/runner/ghidra  
+    - uses: actions/upload-artifact@v4
+      with:
+        name: "GBAnalyzer_Plugin_${{env.GHIDRA_VERSION}}"
+        path: dist/*GBAnalyzer.zip
+        if-no-files-found: 'error'
