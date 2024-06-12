@@ -274,6 +274,20 @@ public class GameboyProvider extends ComponentProvider {
 		checksumAction.markHelpUnnecessary();
 		checksumAction.setHelpLocation(HELP);
 		dockingTool.addLocalAction(this, checksumAction);
+		
+		DockingAction codeCommentAction = new DockingAction("Identify Hardware Access", getName()) {
+			@Override
+			public void actionPerformed(ActionContext context) {
+				System.out.println("Setting comments for hardware access!");
+				GameboyHelper.setCodeComments();
+			}
+		};
+
+		codeCommentAction.setToolBarData(new ToolBarData(FontIcon.of(Evaicons.CODE), null));
+		codeCommentAction.setEnabled(true);
+		codeCommentAction.markHelpUnnecessary();
+		codeCommentAction.setHelpLocation(HELP);
+		dockingTool.addLocalAction(this, codeCommentAction);
 	}
 
 	@Override

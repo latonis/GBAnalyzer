@@ -3,14 +3,19 @@ package gameboy;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import ghidra.program.model.symbol.Reference;
+
 import java.util.LinkedHashMap;
 import java.util.Map;
+import ghidra.program.model.address.Address;
 
 import org.apache.commons.lang3.ArrayUtils;
 
 import ghidra.framework.plugintool.PluginTool;
 import ghidra.program.flatapi.FlatProgramAPI;
 import ghidra.program.model.listing.CodeUnit;
+import ghidra.program.model.listing.Instruction;
+import ghidra.program.model.listing.InstructionIterator;
 import ghidra.program.model.mem.MemoryAccessException;
 
 public class GameboyHelper {
@@ -32,7 +37,6 @@ public class GameboyHelper {
 		buildMap();
 		buildCartridgeTypes();
 		buildHeader();
-//		setComments();
 		buildLicensees();
 	}
 
@@ -359,12 +363,24 @@ public class GameboyHelper {
 		ioEntries.put(0xFFFF, "IE: Interrupt enable");
 
 		var id = api.getCurrentProgram().startTransaction("Set line comment from Kernel");
+		
+		InstructionIterator insIter = api.getCurrentProgram().getListing().getInstructions(true);
+		while (insIter.hasNext()) {
+			Instruction ins = insIter.next();
+			for (Reference ref: ins.getReferencesFrom()) {
+				int dest = (int) ref.getToAddress().getPhysicalAddress().getOffset();
+				if (ioEntries.containsKey(dest)) {
+					CodeUnit cu = api.getCurrentProgram().getListing().getCodeUnitContaining(ins.getAddress());
+					cu.setComment(CodeUnit.EOL_COMMENT, ioEntries.get(dest));
+				}
 
+			}	
+		}
+		
 		for (Map.Entry<Integer, String> entry : ioEntries.entrySet()) {
 			CodeUnit cu = api.getCurrentProgram().getListing().getCodeUnitContaining(api.toAddr(entry.getKey()));
 			cu.setComment(CodeUnit.EOL_COMMENT, entry.getValue());
 		}
-
 		api.getCurrentProgram().endTransaction(id, true);
 	}
 
@@ -408,7 +424,10 @@ public class GameboyHelper {
 	public static String getMD5() {
 		return api.getCurrentProgram().getExecutableMD5();
 	}
-
+	
+	public static void setCodeComments() {
+		setComments();
+	}
 	public static String getLicensee() {
 		try {
 			int addr_val = api.getByte(api.toAddr(headerEntries.get("Old Licensee Code")));
